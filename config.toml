@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://majkelspace.net"
+base_url = "https://michal4458.github.io/majkelspace"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
