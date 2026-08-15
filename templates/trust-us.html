@@ -5,12 +5,12 @@
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
     <!-- Zola sama skompiluje plik z sass/style.scss do CSS -->
 	<link rel="stylesheet" href="{{ get_url(path='style.css') }}">    
-    <link rel="icon" type="image/png" href="/images/icon.jpg">
+    <link rel="icon" type="image/png" src="{{ get_url(path='images/icon.jpg') }}">
 </head>
 <body>
 	<a href="/" class="full-screen-link">
 	<video autoplay muted loop id="myVideo">
-  <source src="/video/trust-us.mp4" type="video/mp4">
+  <source src="{{ get_url(path='video/trust-us.mp4') }}" type="video/mp4">
 	</video>
 	</a>
 </body>
