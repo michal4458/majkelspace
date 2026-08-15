@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}majkelspace.net - blog{% endblock title %}</title>
+    <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
+    <link rel="icon" type="image/png" href="/images/icon.jpg">    
+</head>
+<!-- Zachowujemy Twoją klasę blog-body i dodajemy crt-active dla efektu CRT -->
+<body class="blog-body crt-active">
+
+    <!-- Przycisk do przełączania trybu CRT -->
+    <button id="crt-toggle" class="crt-toggle-btn">CRT: ON</button>
+
+    <!-- Jedno płótno dla całego układu bloga -->
+    <canvas id="space-bg"></canvas>
+
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Skrypt uruchamiający gwieździste tło -->
+    <script src="{{ get_url(path='stars.js') }}"></script>
+
+    <!-- Skrypt obsługi motywu CRT (pamięta preferencję ze strony głównej) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.getElementById("crt-toggle");
+        
+        // Odczytujemy zapisaną w localStorage preferencję użytkownika
+        const crtState = localStorage.getItem("crt-mode") || "enabled";
+
+        if (crtState === "enabled") {
+          document.body.classList.add("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: ON";
+        } else {
+          document.body.classList.remove("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: OFF";
+        }
+
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("crt-active");
+            const isActive = document.body.classList.contains("crt-active");
+            
+            localStorage.setItem("crt-mode", isActive ? "enabled" : "disabled");
+            toggleBtn.innerText = isActive ? "CRT: ON" : "CRT: OFF";
+          });
+        }
+      });
+    </script>
+</body>
+</html>

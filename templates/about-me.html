@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <!-- Zola sama skompiluje plik z sass/style.scss do CSS -->
+    <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
+    <link rel="icon" type="image/png" href="/images/icon.jpg">
+</head>
+<body>
+<!-- Zachowujemy Twoją klasę blog-body i dodajemy crt-active dla efektu CRT -->
+<body class="blog-body crt-active">
+
+    <!-- Przycisk do przełączania trybu CRT -->
+    <button id="crt-toggle" class="crt-toggle-btn">CRT: ON</button>
+
+    <!-- Jedno płótno dla całego układu bloga -->
+    <canvas id="space-bg"></canvas>
+
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Skrypt uruchamiający gwieździste tło -->
+    <script src="{{ get_url(path='stars.js') }}"></script>
+
+    <!-- Skrypt obsługi motywu CRT (pamięta preferencję ze strony głównej) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.getElementById("crt-toggle");
+        
+        // Odczytujemy zapisaną w localStorage preferencję użytkownika
+        const crtState = localStorage.getItem("crt-mode") || "enabled";
+
+        if (crtState === "enabled") {
+          document.body.classList.add("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: ON";
+        } else {
+          document.body.classList.remove("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: OFF";
+        }
+
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("crt-active");
+            const isActive = document.body.classList.contains("crt-active");
+            
+            localStorage.setItem("crt-mode", isActive ? "enabled" : "disabled");
+            toggleBtn.innerText = isActive ? "CRT: ON" : "CRT: OFF";
+          });
+        }
+      });
+    </script>
+
+    <div class="retro-box-container">
+
+  <!-- BOX: O MNIE / BIO -->
+  <div class="retro-box">
+    <div class="box-header">ABOUT ME</div>
+    <div class="box-content flex-row">
+      <div class="avatar-wrapper">
+        <img src="/images/avatar2.jpg" alt="Avatar" class="retro-avatar">
+      </div>
+      <div class="bio-text">
+        <p>Serwus! Jestem <strong>Michał</strong> — mam 19 lat i jaram się tworzeniem rzeczy w sieci, retrogamingiem i dobrą herbatą.</p>
+        <p>Głównie programuję, eksploruję starą technologię i czytam literaturę fantasy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOX: INTERESTS / ZAJAWKI -->
+  <div class="retro-box">
+    <div class="box-header">INTERESTS & HOBBIES</div>
+    <div class="box-content">
+      <ul class="star-list">
+        <li>☆ <strong>Tech & Code:</strong> Webdev, Retro hardware (PS2 modding)</li>
+        <li>☆ <strong>Gaming:</strong> Klasyki z ery PS2, RPG, Indie</li>
+        <li>☆ <strong>Books:</strong> LOTR, Wiedźmin, Silmarillion</li>
+        <li>☆ <strong>Other:</strong> Mentalizm, Herbata, Analogowa estetyka</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BOX: SETUP / GEAR -->
+  <div class="retro-box">
+    <div class="box-header">MY SETUP</div>
+    <div class="box-content">
+      <table class="retro-table">
+        <tr>
+          <td><strong>OS:</strong></td>
+          <td>Linux Mint</td>
+        </tr>
+        <tr>
+          <td><strong>Console:</strong></td>
+          <td>PS2 Fat (Modded)</td>
+        </tr>
+        <tr>
+          <td><strong>Phone:</strong></td>
+          <td>Iphone 13 mini</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<div class="nav-buttons">
+        <span class="home-button"><a href="/">[Home]</a></span>
+</div>
+
+</div>
+</body>
+</html>

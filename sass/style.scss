@@ -1,0 +1,897 @@
+/* ==========================================================================
+   1. RESET & BAZOWE USTAWIENIA
+   ========================================================================== */
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+@font-face {
+  font-family: queer; /* set name */
+  src: url("/fonts/QUEER.TTF"); /* url of the font */
+}
+
+@font-face {
+  font-family: courierprime; /* set name */
+  src: url("/fonts/CourierPrime.ttf"); /* url of the font */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 1. Ustawienia dla całej strony (body) oraz wszystkich okienek z tekstem (*) */
+body, * {
+  scrollbar-width: thin;             /* Działa w Firefoxie */
+  scrollbar-color: #ffffff #000000;    /* [kolor suwaka] [kolor tła] */
+}
+
+/* 2. WebKit (Chrome, Edge, Brave, Safari, Opera) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #000000;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+  border-left: 1px solid #333333;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 0px; /* Retro pikselowe krawędzie */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #00ff66; /* Zielony akcent przy najechaniu */
+}
+
+::-webkit-scrollbar-corner {
+  background: #000000;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: courierprime;
+  font-size: 12px;
+  color: white;
+  background-color: transparent; /* Przezroczyste, by odsłonić gwiezdne tło */
+}
+
+/* Tło z dynamicznymi gwiazdami (Canvas) */
+#space-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;               /* Umieszcza gwiazdy pod całą treścią */
+  background-color: #000000; /* Głęboka czsień kosmosu */
+  pointer-events: none;      /* Myszka ignoruje płótno */
+}
+
+/* Główny kontener całej witryny */
+.container {
+  width: fit-content;
+  min-width: min(900px, 100%);
+  max-width: 95vw;
+  margin: 3rem auto;
+  padding: 5px 5px;
+  background-color: black;   /* Czarne tło ramki głównej */
+  border: 2px solid white;
+  border-radius: 15px;
+}
+
+.main-content {
+  text-align: center;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* --- EFEKT CRT --- */
+body.crt-active {
+  position: relative;
+  overflow-x: hidden;
+
+  /* EFEKT CRT (Linie skanowania + delikatny cień/winieta) */
+  &::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    bottom: 0; 
+    right: 0;
+    background: 
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
+      linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    pointer-events: none; /* Umożliwia normalne klikanie na elementy pod spodem */
+    z-index: 99999;
+    background-size: 100% 3px, 6px 100%;
+  }
+}
+
+/* Przycisk przełączający CRT */
+.crt-toggle-btn {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 100000;
+  padding: 6px 12px;
+  background: #000;
+  color: #00ff66;
+  border: 1px solid #00ff66;
+  font-family: monospace;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(0, 255, 102, 0.4);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #00ff66;
+    color: #000;
+    box-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+  }
+}
+
+
+/* ==========================================================================
+   2. NAGŁÓWEK STRONY (BANNER ASCII)
+   ========================================================================== */
+
+.site-header {
+  margin-bottom: 3rem;
+  font-family: queer; /* set name */
+font-size: 6rem;
+}
+
+.header-banner {
+  height: 220px;
+  border: 0px solid #444;
+  background-image: url("/images/blow-banner.jpg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-title {
+  letter-spacing: 0px;
+}
+
+
+/* ==========================================================================
+   3. UKŁAD STRONY GŁÓWNEJ (HERO & SIDEBAR)
+   ========================================================================== */
+
+.hero {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 4px;
+  margin-right: 1rem;
+}
+
+.hero-content {
+  flex: 1;
+  text-align: left;
+
+  h1 {
+    margin-top: 0;
+  }
+}
+
+/* --- LEWY PANEL SIDEBAR --- */
+.sidebar {
+  width: 184px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-left: 20px;
+  margin-bottom: 3rem;
+}
+
+/* Avatar */
+.user-info-wrapper {
+  display: grid;
+  gap: 12px; /* Odstęp między obrazkiem a tekstem */
+  margin-bottom: 1rem;
+}
+/* Kontener łączący zdjęcie i tekst w jednym rzędzie */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 2px; /* Odstęp między zdjęciem a informacjami */
+  margin-bottom: 15px;
+  border: 1px solid white;
+  padding: 4px;
+}
+
+/* Twój dotychczasowy styl ramki */
+.pfp-box {
+  width: 65px;
+  height: 67px;
+  border: 1px dotted white;
+  overflow: hidden;
+  flex-shrink: 0; /* Zapobiega zmniejszaniu obrazka */
+
+  img {
+    width: 65px;
+    height: 67px;
+    object-fit: cover;
+  }
+}
+
+/* Styl tekstu po prawej stronie */
+.user-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: white;
+  text-align: left;
+}
+.user-title {
+font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  text-transform: uppercase;
+  text-align: left;
+  border-bottom: 1px solid white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;  
+}
+.user-details {
+  text-align: left;
+  border: 1px solid white;
+}
+.dots::after {
+  content: '';
+  animation: dotsAnimation 1.5s infinite steps(4, jump-none);
+}
+
+@keyframes dotsAnimation {
+  0%   { content: ''; }
+  33%  { content: '.'; }
+  66%  { content: '..'; }
+  100% { content: '...'; }
+}
+
+.pfp-info {
+  font-size: 10px;
+  text-align: center;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+/* Nawigacja w sidebarze */
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  padding-bottom: 0rem;
+  border: 1px solid white;
+
+  a {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+    padding-left: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.nav-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  text-transform: uppercase;
+  text-align: left;
+  border-bottom: 1px solid white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+}
+
+/* Linki w sidebarze */
+.social {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  padding-bottom: 0rem;
+  border: 1px solid white;
+
+  a {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+    padding-left: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid white;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.social-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  text-transform: uppercase;
+  text-align: left;
+  border-bottom: 1px solid white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+}
+
+
+
+
+
+/* ==========================================================================
+   4. WIDŻETY I WIERSZE INFORMACYJNE
+   ========================================================================== */
+
+.info-row,
+.info-row2 {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
+
+/* --- NEWS BOX --- */
+.news-box {
+  border: 1px solid white;
+  width: 250px;
+  height: 150px;
+  overflow: hidden; /* Poprawiono literówkę z overfolw */
+}
+
+.news-title {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  border-bottom: 1px solid white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 12px;
+}
+
+.news-content {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 12px;
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+  }
+}
+
+.news-item {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid white;
+}
+
+.news-text {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.news-date {
+  font-size: 12px;
+  color: #777;
+}
+
+
+/* --- BANNER ŚRODKOWY  --- */
+.content-separator {
+  /* Zamiast 100% dajemy np. 90%, żeby linia miała odstęp z obu stron */
+  width: 100%; 
+  
+  height: 1px;
+  background-color: #fff; /* lub border-bottom, zależnie od stylu */
+  
+  /* 20px góra/dół, a 'auto' po bokach wyśrodkowuje linię idealnie w kontenerze */
+  margin: 20px auto; 
+}
+
+/* --- LISTA CELE (GOALS) --- */
+.goals {
+  width: 150px;
+  height: 200px;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column; /* Oddziela tytuł od listy ze scrollem */
+  box-sizing: border-box;
+}
+
+.goals-title {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  border-bottom: 1px solid white;
+  padding: 2px 0 2px 12px;
+  flex-shrink: 0; /* Gwarantuje, że nagłówek nie zmniejszy się przy scrollu */
+}
+
+/* Lista z włączonym przewijaniem */
+.goals ul.goals-list {
+  padding: 8px 10px;
+  margin: 0;
+  list-style: none; /* Usuwamy domyślne kropki listy */
+  overflow-y: auto;  /* Przewijanie w pionie */
+  height: 100%;      /* Wypełnia resztę wysokości ramki */
+}
+
+/* Wygładzenie odstępów w liście */
+.goals li p,
+.goals li del {
+  margin: 0 0 6px 0;
+  display: block;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+/* Gwiazdki retro przed elementami */
+.goals li p::before,
+.goals li del::before {
+  content: "☆ ";
+}
+
+del {
+  color: #777;
+}
+
+/* --- RETRO SCROLLBAR DLA GOALS --- */
+.goals ul.goals-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.goals ul.goals-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.goals ul.goals-list::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.goals ul.goals-list::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+/* ==========================================
+   SEKCJA ABOUT SITE (z obsługą Firefox Scrollbar)
+   ========================================== */
+
+.about-site {
+  width: 400px;
+  height: 200px;
+  border: 1px solid white;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.about-site-title {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  border-bottom: 1px solid white;
+  padding: 4px 12px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.about-site-content {
+  padding: 12px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  flex-grow: 1;
+  
+  /* Łamanie tekstu i wyrazów bez spacji */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.4;
+  font-size: 13px;
+  color: #fff;
+}
+
+/* Stylizacja elementów generowanych z Markdown (.md) */
+.about-site-content p {
+  margin: 0 0 10px 0;
+}
+
+.about-site-content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-site-content a {
+  color: #00ff66;
+  text-decoration: underline;
+}
+
+.about-site-content a:hover {
+  background: #00ff66;
+  color: #000;
+}
+
+.about-site-content strong {
+  color: #00ff66;
+}
+
+
+/* Styl dla iPoda i pozycjonowanie ekranu */
+.fav-songs .ipod-container {
+  position: relative;
+  display: none;
+}
+
+.fav-songs img {
+  width: 300px;
+  display: block;
+}
+
+/* Ekran na tle iPoda */
+.ipod-screen {
+  position: absolute;
+  top: 18.5%;
+  left: 6%;
+  width: 47%;
+  height: 63%;
+  background-color: #fff;
+  font-family: courierprime;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+
+/* Nagłówek i lista w iPodzie */
+.ipod-header {
+  font-size: 12px;
+  border-bottom: 1px solid #000;
+  padding-bottom: 2px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+}
+
+.ipod-playlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ipod-playlist li {
+  line-height: 1.4;
+  position: relative;
+}
+
+/* Link piosenki - zmiana koloru i tła przy hoverze */
+/* Link piosenki */
+.ipod-playlist a {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  padding: 1px 2px;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  font-size: 11px;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.ipod-playlist a:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.ipod-playlist a span {
+  display: inline-block;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Animacja uruchamia się tylko dla elementów z klasą overflowing */
+.ipod-playlist a.overflowing:hover span {
+  animation: marquee var(--marquee-duration, 3s) linear infinite alternate;
+}
+
+@keyframes marquee {
+  0%, 20% {
+    transform: translateX(0);
+  }
+  80%, 100% {
+    transform: translateX(var(--marquee-distance, -100px));
+  }
+}
+/* ==========================================================================
+   6. SEKCYJNA STRONA BLOGA (BLOG TEMPLATES)
+   ========================================================================== */
+
+.blog-body {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  color: white;
+}
+
+/* Wspólny styl dla okna bloga i pojedynczego posta */
+.blog-page,
+.post-page {
+  position: relative;
+  width: 700px;
+  height: 650px;
+  max-height: 80vh; /* Zapobiega wykraczaniu poza ekran na mniejszych monitorach */
+  margin: 6rem auto 2rem auto;
+  border: 1px solid white;
+  padding: 1.5rem;
+  background: black; /* Czarne tło wewnątrz ramki */
+  box-sizing: border-box;
+  overflow: hidden;  /* Zapobiega wychodzeniu elementów/rycerza poza zaokrąglenia i ramkę */
+}
+
+.blog-header {
+  font-size: 4rem;
+  font-family: queer;
+  text-align: center;
+  letter-spacing: 6px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.blog-description {
+  text-align: center;
+  color: #aaa;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Lista wpisów – przesunięta w prawo, aby nie nachodzić na rycerza */
+.blog-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  
+  height: 380px;            /* Stała wysokość sekcji z wpisami */
+  padding-right: 5px;       /* Odstęp od paska scrolla */
+  
+  overflow-y: auto;         /* Przewijanie TYLKO dla sekcji z postami */
+  position: relative;
+  z-index: 1;               /* Interaktywne wpisy są NAD rycerzem */
+
+}
+
+/* Pojedynczy podgląd posta */
+.blog-post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border: 1px solid #444;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: white;
+  }
+}
+
+.post-title {
+  font-size: 1rem;
+}
+
+.post-date {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+
+/* ==========================================================================
+   7. POJEDYNCZY WPIS BLOGOWY (SINGLE POST PAGE)
+   ========================================================================== */
+
+.post-page {
+  /* Nadpisanie zachowania układu dla konkretnego wpisu */
+  display: flex;
+  flex-direction: column;
+}
+
+.post-header {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.8rem;
+  flex-shrink: 0;
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+}
+
+.post-meta {
+  margin-top: 0.5rem;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/* KONTENER TEKSTU W ARTYKULE — WŁĄCZAMY PRZEWIJANIE */
+.post-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  line-height: 1.8;
+  font-size: 14px;
+
+  
+  h1, h2, h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: white;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: white;
+    text-decoration: underline;
+  }
+
+  code {
+    background: #111;
+    padding: 2px 6px;
+    border: 1px solid #333;
+    font-family: monospace;
+  }
+
+  pre {
+    background: #111;
+    padding: 1rem;
+    overflow-x: auto;
+    border: 1px solid #333;
+  }
+}
+
+/* ==========================================================================
+   8. PRZYCISKI NAWIGACJI
+   ========================================================================== */
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.home-button a,
+.blog-button a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+/* ==========================================================================
+   1. ABOUT ME
+   ========================================================================== */
+.retro-box-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.retro-box {
+  border: 1px solid #ffffff;
+  background: #000000;
+  padding: 0;
+}
+
+.box-header {
+  border-bottom: 1px solid #ffffff;
+  padding: 4px 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  background: #111111;
+}
+
+.box-content {
+  padding: 12px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.retro-avatar {
+  width: 90px;
+  height: 90px;
+  border: 1px solid #fff;
+  object-fit: cover;
+}
+
+.star-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.8;
+}
+
+.retro-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.retro-table td {
+  padding: 4px 0;
+}
+
+/* Zielony akcent nawiązujący do włączonego CRT / linków */
+.highlight-green {
+  color: #00ff66;
+}

@@ -1,0 +1,117 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<header class="site-header">MAJKELSPACE</header>
+
+<div class="hero">
+  <aside class="sidebar">
+    <div class="user-info-wrapper">
+       <div class="profile-section">
+  <div class="pfp-box">
+    <img src="/images/avatar2.jpg" alt="avatar">
+  </div>
+  <div class="user-detail">
+    <div class="detail-item">age - 19</div>
+    <div class="detail-item">mood - tired</div>    
+    <div class="detail-item">tea enjoyer</div>
+  </div>
+       </div>
+<!-- Małe informacje obok avatara -->
+      <div class="user-details">
+        <div class="user-title">STATUS</div>
+        <div class="user-list">
+          <div>☆ building stuff<span class="dots"></span></div>
+        </div>
+      </div>
+
+      <nav class="sidebar-links">
+        <div class="nav-label">NAV</div>
+        <a href="/">[Home]</a>
+        <a href="/blog">[Blog]</a>
+	<a href="/about-me">[About me]</a>
+	<a href="/trust-us">[TRUST US!]</a>	
+      </nav>
+
+	<nav class="social">
+        <div class="social-label">LINKS</div>
+	<a href="https://www.instagram.com/czlowiek_t3mat?igsh=cGFqNnExdWY0em0z&utm_source=qr">[Instagram]</a>	
+        <a href="https://youtube.com/@czlowiektemat?si=igiTDgXQnNVSvpYN">[Youtube]</a>
+	<a href="https://open.spotify.com/user/5dn06q33dhxk4r874s9ybwtls?si=e34713fe3c7540f7">[Spotify]</a>	
+	<a href="https://steamcommunity.com/profiles/76561199097218522/">[Steam]</a> 
+	</nav>
+      
+
+      <div class="buttons">
+        <img src="/images/poweredbymac.gif" alt="guzik">
+        <img src="/images/mp3.gif" alt="guzik">
+      </div>
+    </div>
+  </aside>
+
+  <section class="hero-content">
+
+    <!-- Pierwszy rząd: NEWS BOX + IPOD -->
+    <div class="info-row">
+      <div class="news-box">
+        <div class="news-title">NEWS BOX</div>
+        <div class="news-content">
+        <div class="news-item">
+            <div class="news-text">Powstanie strony</div>
+            <div class="news-date">2026-08-15</div>
+	</div>
+        </div>
+      </div>
+
+      <!-- iPod po prawej stronie w pierwszym rzędzie -->
+      <div class="fav-songs">
+  <div class="ipod-container">
+    <img src="/images/pod.png" alt="iPod">
+    
+    <!-- Ekran iPoda -->
+    <div class="ipod-screen">
+      <div class="ipod-header">FAV TRACKS</div>
+      <ul class="ipod-playlist">
+        <li><a href="https://open.spotify.com/track/4CEK8L459CVr9wqc4ib2ZD?si=fc900dcda68f4ff3" target="_blank"><span>Dorian Concept - Hide Slow</span></a></li>
+        <li><a href="https://on.soundcloud.com/v9GCBoFCxjlkKTHh61" target="_blank"><span>Sentino feat Diho RaZ Pitbull</span></a></li>
+        <li><a href="https://open.spotify.com/track/LINK_3" target="_blank"><span>3. Title - Artist</span></a></li>
+        <li><a href="https://open.spotify.com/track/LINK_4" target="_blank"><span>4. Title - Artist</span></a></li>
+        <li><a href="https://open.spotify.com/track/LINK_5" target="_blank"><span>5. Title - Artist</span></a></li>
+      </ul>
+    </div>
+  </div>
+      </div>
+
+    </div>
+
+    <!-- Baner z oczami -->
+    <div class="content-separator"></div>
+
+    <!-- Drugi rząd: GOALS na dole -->
+    <div class="info-row2">
+      <div class="goals">
+        <div class="goals-title">2026 GOALS</div>
+        <ul class="goals-list">
+          <li><del>add guestbook</del></li>
+          <li><p>get a real job</p></li>
+          <li><p>read all witcher saga</p></li>
+          <li><p>read LOTR trilogy</p></li>
+          <li><p>learn mentalism</p></li>
+          <li><del>modded ps2 fat</del></li>
+        </ul>
+      </div>
+
+   <div class="about-site">
+  <div class="about-site-title">ABOUT SITE</div>
+  <div class="about-site-content">
+    <!-- Pobieramy plik content/about_site.md -->
+    {% set about = get_page(path="about_site.md") %}
+    
+    <!-- Renderujemy go z bezpiecznym dozwoleniem na HTML (| safe) -->
+    {{ about.content | safe }}
+  </div>
+   </div> 
+    </div>
+
+  </section>
+</div>
+{% endblock content %}

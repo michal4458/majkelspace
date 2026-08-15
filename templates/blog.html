@@ -1,0 +1,33 @@
+{% extends "blog-base.html" %}
+
+{% block content %}
+<div class="blog-page">
+
+   
+    <div class="blog-header">
+        BLOG
+    </div>
+
+    <div class="nav-buttons">
+        <span class="home-button"><a href="/">[Home]</a></span>
+    </div>
+
+    <div class="blog-description">
+        {{ section.content | safe }}
+    </div>
+
+    <div class="blog-posts">
+        {% for page in section.pages %}
+        <a class="blog-post" href="{{ page.permalink }}">
+            <div class="post-title">
+                {{ page.title }}
+            </div>
+            <div class="post-date">
+                {{ page.date | date(format="%Y-%m-%d") }}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock content %}
