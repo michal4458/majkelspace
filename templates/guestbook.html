@@ -1,94 +1,28 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
-    <!-- Zola sama skompiluje plik z sass/style.scss do CSS -->
-    <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
-    <link rel="icon" type="image/png" src="{{ get_url(path='images/icon.jpg') }}">
-</head>
-<!-- Domyślnie włączamy klasę crt-active -->
-<body class="crt-active">
+{% extends "_base.html" %}
 
-    <!-- Przycisk do przełączania trybu CRT -->
-    <button id="crt-toggle" class="crt-toggle-btn">CRT: ON</button>
-
-    <!-- Płótno z gwieździstym tłem -->
-    <canvas id="space-bg"></canvas>
-
-    <div class="container">
-        <main class="main-content">
-            {% block content %}
-            {% endblock content %}
-        </main>
+{% block content %}
+<div class="guestbook-wrapper" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h1>{{ page.title }}</h1>
+    
+    <div class="page-content" style="margin-bottom: 30px;">
+        {{ page.content | safe }}
     </div>
 
-    <!-- Skrypt Gwiazd -->
-    <script src="{{ get_url(path='stars.js') }}"></script>
-
-    <!-- Skrypt iPod Playlist Marquee -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const SPEED_PX_PER_SEC = 40;
-
-        document.querySelectorAll('.ipod-playlist a').forEach(link => {
-          const span = link.querySelector('span');
-          if (!span) return;
-          
-          const overflowDistance = span.scrollWidth - link.clientWidth;
-          
-          if (overflowDistance > 0) {
-            link.classList.add('overflowing');
-            const duration = overflowDistance / SPEED_PX_PER_SEC;
-            span.style.setProperty('--marquee-duration', `${Math.max(duration, 1)}s`);
-            span.style.setProperty('--marquee-distance', `-${overflowDistance}px`);
-          }
-        });
-      });
+    <!-- Skrypt Giscus -->
+    <script src="https://giscus.app/client.js"
+            data-repo="michal4458/majkelspace"
+            data-repo-id="R_kgDOT5j_mA"
+            data-category="General"
+            data-category-id="DIC_kwDOT5j_mM4DDvCJ"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="https://michal4458.github.io/majkelspace/style.css"
+            data-lang="pl"
+            crossorigin="anonymous"
+            async>
     </script>
-
-    <!-- Skrypt obsługi motywu CRT -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const toggleBtn = document.getElementById("crt-toggle");
-        
-        // Domyślnie 'enabled', chyba że użytkownik wcześniej wyłączył w przeglądarce
-        const crtState = localStorage.getItem("crt-mode") || "enabled";
-
-        if (crtState === "enabled") {
-          document.body.classList.add("crt-active");
-          if (toggleBtn) toggleBtn.innerText = "CRT: ON";
-        } else {
-          document.body.classList.remove("crt-active");
-          if (toggleBtn) toggleBtn.innerText = "CRT: OFF";
-        }
-
-        if (toggleBtn) {
-          toggleBtn.addEventListener("click", () => {
-            document.body.classList.toggle("crt-active");
-            const isActive = document.body.classList.contains("crt-active");
-            
-            localStorage.setItem("crt-mode", isActive ? "enabled" : "disabled");
-            toggleBtn.innerText = isActive ? "CRT: ON" : "CRT: OFF";
-          });
-        }
-      });
-    </script>
-    <!-- skrypt guestbook'a --!>
-	    <script src="https://giscus.app/client.js"
-        data-repo="michal4458/majkelspace"
-        data-repo-id="R_kgDOT5j_mA"
-        data-category="General"
-        data-category-id="DIC_kwDOT5j_mM4DDvCJ"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="https://michal4458.github.io/majkelspace/style.css"
-        data-lang="pl"
-        crossorigin="anonymous"
-        async>
-	    </script>
-</body>
-</html>
+</div>
+{% endblock content %}
