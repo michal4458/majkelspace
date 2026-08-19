@@ -4,7 +4,7 @@
 <div class="guestbook-wrapper" style="max-width: 800px; margin: 0 auto; padding: 20px;">
     <h1>{{ page.title }}</h1>
 
-    <div class="nav-buttons">
+    <div class="nav-buttons" style="margin-bottom: 20px;">
         <span class="home-button"><a href="{{ get_url(path='') }}">[Home]</a></span>
     </div>    
     
@@ -12,40 +12,20 @@
         {{ page.content | safe }}
     </div>
 
-    <!-- Sekcja Cusdis z wymuszonym ciemnym motywem i polskim językiem -->
+    <!-- Kontener CommentBox -->
+    <div class="commentbox"></div>
+
+    <!-- Skrypt CommentBox -->
+    <script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
     <script>
-      window.CUSDIS_LOCALE = {
-        powered_by: 'Księga gości',
-        post_comment: 'Wyślij',
-        loading: 'Ładowanie...',
-        email: 'E-mail (opcjonalnie)',
-        nickname: 'Twój Nick',
-        reply_content: 'Treść wpisu',
-        reply: 'Odpowiedz'
-      }
+        commentBox('5702084942888960-proj', {
+            className: 'commentbox', // domyślna klasa
+            defaultBoxId: 'guestbook', // identyfikator księgi
+            backgroundColor: '#000000', // tło pola
+            textColor: '#ffffff', // kolor tekstu
+            subtextColor: '#aaaaaa', // kolor podpisów/dat
+            fadeEffect: true
+        });
     </script>
-
-    <div id="cusdis_thread"
-      data-host="https://cusdis.com"
-      data-app-id="6dea4dc9-3f44-4a4e-926c-fe0789666104"
-      data-page-id="{{ page.slug }}"
-      data-page-url="{{ page.permalink }}"
-      data-page-title="{{ page.title }}"
-      data-theme="dark"
-    ></div>
-
-    <!-- Usuwa scrollbar i dostosowuje wysokość ramki -->
-    <script async defer src="https://cusdis.com/js/widget/iframeResize.js"></script>
-    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>    
 </div>
-
-<!-- Prosty fix CSS, żeby rozciągnąć ramkę Cusdis w 100% i usunąć czarne paski -->
-<style>
-  #cusdis_thread iframe {
-    width: 100% !important;
-    min-height: 400px !important;
-    border: none !important;
-    color-scheme: dark !important;
-  }
-</style>
 {% endblock content %}
