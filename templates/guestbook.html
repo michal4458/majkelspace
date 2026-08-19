@@ -12,21 +12,14 @@
         {{ page.content | safe }}
     </div>
 
-    <!-- Skrypt Giscus -->
-    <script src="https://giscus.app/client.js"
-            data-repo="michal4458/majkelspace"
-            data-repo-id="R_kgDOT5j_mA"
-            data-category="General"
-            data-category-id="DIC_kwDOT5j_mM4DDvCJ"
-            data-mapping="pathname"
-            data-strict="0"
-            data-reactions-enabled="1"
-            data-emit-metadata="0"
-            data-input-position="bottom"
-            data-theme="https://michal4458.github.io/majkelspace/style.css"
-            data-lang="pl"
-            crossorigin="anonymous"
-            async>
-    </script>
-</div>
+    <!-- Skrypt Guestbook -->
+<div id="cusdis_thread"
+  data-host="https://cusdis.com"
+  data-app-id="6dea4dc9-3f44-4a4e-926c-fe0789666104"
+  data-page-id="{{ PAGE_ID }}"
+  data-page-url="{{ PAGE_URL }}"
+  data-page-title="{{ PAGE_TITLE }}"
+></div>
+<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>    
+    </div>
 {% endblock content %}
