@@ -1,24 +1,63 @@
-{% extends "_base.html" %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+    <!-- Zola sama skompiluje plik z sass/style.scss do CSS -->
+    <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
+    <link rel="icon" type="image/png" src="{{ get_url(path='images/icon.jpg') }}">
+</head>
+<body>
+<!-- Zachowujemy Twoją klasę blog-body i dodajemy crt-active dla efektu CRT -->
+<body class="blog-body crt-active">
 
-{% block content %}
-<div class="guestbook-wrapper" style="max-width: 800px; margin: 0 auto; padding: 20px;">
-    <h1>{{ page.title }}</h1>
+    <!-- Przycisk do przełączania trybu CRT -->
+    <button id="crt-toggle" class="crt-toggle-btn">CRT: ON</button>
 
-    <div class="nav-buttons" style="margin-bottom: 20px; text-align: center;">
-        <span class="home-button"><a href="{{ get_url(path='') }}">[Home]</a></span>
-    </div>    
-    
-    <div class="page-content" style="margin-bottom: 20px; text-align: center;">
-        {{ page.content | safe }}
-    </div>
+    <!-- Jedno płótno dla całego układu bloga -->
+    <canvas id="space-bg"></canvas>
 
-    <!-- Wklejka Atabook -->
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Skrypt uruchamiający gwieździste tło -->
+    <script src="{{ get_url(path='stars.js') }}"></script>
+
+    <!-- Skrypt obsługi motywu CRT (pamięta preferencję ze strony głównej) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.getElementById("crt-toggle");
+        
+        // Odczytujemy zapisaną w localStorage preferencję użytkownika
+        const crtState = localStorage.getItem("crt-mode") || "enabled";
+
+        if (crtState === "enabled") {
+          document.body.classList.add("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: ON";
+        } else {
+          document.body.classList.remove("crt-active");
+          if (toggleBtn) toggleBtn.innerText = "CRT: OFF";
+        }
+
+        if (toggleBtn) {
+          toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("crt-active");
+            const isActive = document.body.classList.contains("crt-active");
+            
+            localStorage.setItem("crt-mode", isActive ? "enabled" : "disabled");
+            toggleBtn.innerText = isActive ? "CRT: ON" : "CRT: OFF";
+          });
+        }
+      });
+    </script>
+    <div class="guestbook-clean-wrapper" style="width: 100%; max-width: 700px; margin: 0 auto; padding: 20px 0;">
     <iframe 
-        src="https://majkelspace.atabook.org/" 
+        src="https://majkelspace.atabook.org" 
         width="100%" 
-        height="750px" 
+        height="850px" 
         style="border: none; background: transparent;" 
         frameborder="0">
     </iframe>
 </div>
-{% endblock content %}
+</body>
+</html>
