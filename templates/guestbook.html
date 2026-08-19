@@ -4,22 +4,22 @@
 <div class="guestbook-wrapper" style="max-width: 800px; margin: 0 auto; padding: 20px;">
     <h1>{{ page.title }}</h1>
 
-	<div class="nav-buttons">
+    <div class="nav-buttons">
         <span class="home-button"><a href="{{ get_url(path='') }}">[Home]</a></span>
-	</div>    
+    </div>    
     
     <div class="page-content" style="margin-bottom: 30px;">
         {{ page.content | safe }}
     </div>
 
     <!-- Skrypt Guestbook -->
-<div id="cusdis_thread"
-  data-host="https://cusdis.com"
-  data-app-id="6dea4dc9-3f44-4a4e-926c-fe0789666104"
-  data-page-id="{{ page_id }}"
-  data-page-url="{{ page_url }}"
-  data-page-title="{{ page_title }}"
-></div>
-<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>    
-    </div>
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="6dea4dc9-3f44-4a4e-926c-fe0789666104"
+      data-page-id="{{ page.slug }}"
+      data-page-url="{{ page.permalink }}"
+      data-page-title="{{ page.title }}"
+    ></div>
+    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>    
+</div>
 {% endblock content %}
