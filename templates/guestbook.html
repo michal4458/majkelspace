@@ -2,6 +2,10 @@
 
 {% block content %}
 <div class="guestbook-wrapper" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+	<!-- Przycisk powrotu -->
+    <div style="margin-bottom: 20px;">
+        <a href="{{ get_url(path='') }}" style="text-decoration: none;">[Home]</a>
+    </div>
     <h1>{{ page.title }}</h1>
     
     <div class="page-content" style="margin-bottom: 30px;">
