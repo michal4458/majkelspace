@@ -12,14 +12,40 @@
         {{ page.content | safe }}
     </div>
 
-    <!-- Skrypt Guestbook -->
+    <!-- Sekcja Cusdis z wymuszonym ciemnym motywem i polskim językiem -->
+    <script>
+      window.CUSDIS_LOCALE = {
+        powered_by: 'Księga gości',
+        post_comment: 'Wyślij',
+        loading: 'Ładowanie...',
+        email: 'E-mail (opcjonalnie)',
+        nickname: 'Twój Nick',
+        reply_content: 'Treść wpisu',
+        reply: 'Odpowiedz'
+      }
+    </script>
+
     <div id="cusdis_thread"
       data-host="https://cusdis.com"
       data-app-id="6dea4dc9-3f44-4a4e-926c-fe0789666104"
       data-page-id="{{ page.slug }}"
       data-page-url="{{ page.permalink }}"
       data-page-title="{{ page.title }}"
+      data-theme="dark"
     ></div>
+
+    <!-- Usuwa scrollbar i dostosowuje wysokość ramki -->
+    <script async defer src="https://cusdis.com/js/widget/iframeResize.js"></script>
     <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>    
 </div>
+
+<!-- Prosty fix CSS, żeby rozciągnąć ramkę Cusdis w 100% i usunąć czarne paski -->
+<style>
+  #cusdis_thread iframe {
+    width: 100% !important;
+    min-height: 400px !important;
+    border: none !important;
+    color-scheme: dark !important;
+  }
+</style>
 {% endblock content %}
